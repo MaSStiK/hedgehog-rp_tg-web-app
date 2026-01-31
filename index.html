@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dice Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div class="title">
+          <h1>🎲 Dice Mini App</h1>
+          <p>Нажми кнопку — отправим бросок кубика в привязанный чат через бота.</p>
+        </div>
+        <div class="badge" id="tgBadge" title="Статус окружения">
+          <span class="dot"></span>
+          <span id="envText">Telegram</span>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="panel result" aria-live="polite">
+          <div class="left">
+            <div class="label">Последний результат</div>
+            <div class="value">
+              <span class="emoji">🎲</span>
+              <span id="lastValue">—</span>
+            </div>
+          </div>
+          <div class="status">
+            <span class="pill" id="sendState">Готов</span>
+          </div>
+        </div>
+
+        <button class="btn" id="rollBtn">
+          <span class="spark"></span>
+          Бросить кубик
+        </button>
+
+        <div class="panel">
+          <div class="label">Подсказка</div>
+          <div class="hint">
+            <span>Фронт отправляет событие через <code>WebApp.sendData</code>.</span>
+            <span>Бот делает <code>sendDice</code> в нужный чат.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span id="userText">Пользователь: —</span>
+        <a class="link" href="#" id="closeLink">Закрыть</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+
+    const envText = document.getElementById("envText");
+    const userText = document.getElementById("userText");
+    const rollBtn = document.getElementById("rollBtn");
+    const lastValue = document.getElementById("lastValue");
+    const sendState = document.getElementById("sendState");
+    const closeLink = document.getElementById("closeLink");
+
+    // UX helpers
+    function setState(text, isBusy=false){
+      sendState.textContent = text;
+      rollBtn.disabled = isBusy;
+    }
+
+    // Telegram init
+    if (tg) {
+      tg.ready();
+
+      // Бейдж окружения
+      envText.textContent = "Telegram";
+
+      // Пользователь (если доступно)
+      const u = tg.initDataUnsafe?.user;
+      if (u) {
+        const name = [u.first_name, u.last_name].filter(Boolean).join(" ");
+        userText.textContent = `Пользователь: ${name}${u.username ? " (@" + u.username + ")" : ""}`;
+      } else {
+        userText.textContent = "Пользователь: (не передан)";
+      }
+
+      closeLink.onclick = (e) => {
+        e.preventDefault();
+        tg.close();
+      };
+    } else {
+      envText.textContent = "Browser";
+      userText.textContent = "Пользователь: (открыто не в Telegram)";
+      closeLink.onclick = (e) => {
+        e.preventDefault();
+        alert("Открой страницу через кнопку бота (Mini App), чтобы работало sendData().");
+      };
+    }
+
+    // “Бросок”
+    rollBtn.onclick = () => {
+      if (!tg) return alert("Открой в Telegram Mini App.");
+
+      // UI: делаем вид, что “крутим”
+      setState("Отправляю…", true);
+      lastValue.textContent = "…";
+
+      const payload = {
+        action: "roll",
+        ts: Date.now()
+      };
+
+      // Отправка боту (бот дальше отправит 🎲 в чат)
+      tg.sendData(JSON.stringify(payload));
+
+      // Важно: sendData часто закрывает WebView — поэтому UI ниже может не успеть показать.
+      // Но на десктопе/некоторых клиентах видно.
+      setTimeout(() => setState("Отправлено", false), 400);
+      setTimeout(() => setState("Готов", false), 1200);
+    };
+  </script>
+</body>
+</html>
