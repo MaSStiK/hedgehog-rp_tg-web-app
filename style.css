@@ -232,3 +232,97 @@ body{
 @media (min-width: 520px){
     .content{ grid-template-columns: 1fr; }
 }
+
+
+
+/* radio group */
+.dice-selector{
+    display: flex;
+    gap: 10px;
+}
+
+/* radio pill */
+.dice-option{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid #444;
+    background: #1b1b1b;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.dice-option:hover{
+    background: #262626;
+    border-color: #666;
+}
+
+/* hide native radio */
+.dice-option input{
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid #777;
+    position: relative;
+}
+
+/* checked state */
+.dice-option input:checked::after{
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ade80, #60a5fa);
+}
+
+.dice-option span{
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    color: #eee;
+}
+
+/* roll button */
+.roll-btn{
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #4ade80, #60a5fa);
+    color: #000;
+}
+
+.roll-btn:active{
+    transform: translateY(1px);
+}
+
+/* result */
+.result{
+    font-size: 14px;
+    color: #aaa;
+}
+
+.event-input{
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke);
+    background: rgba(0,0,0,0.25);
+    color: var(--text);
+    font-size: 14px;
+}
+
+.event-input::placeholder{
+    color: var(--muted);
+}
+
+.event-input:focus{
+    outline: none;
+    border-color: rgba(99,102,241,.7);
+}
