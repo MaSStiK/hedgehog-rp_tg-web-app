@@ -64,7 +64,10 @@ rollBtn.onclick = () => {
     // console.log(message);
 
     sendTextToTelegram(message)
-    setTimeout(() => setState("Готов", false), 1200);
+    setTimeout(() => {
+        setState("Готов", false)
+        eventInput.value = ""
+    }, 1200);
 };
 
 function getSelectedDice(){
