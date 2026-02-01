@@ -25,7 +25,7 @@ body{
     display:flex;
     align-items:center;
     justify-content:center;
-    padding: 18px;
+    padding: 4px;
 }
 
 .wrap{
@@ -97,7 +97,7 @@ body{
     padding: 0 18px 18px;
     display:grid;
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 4px;
 }
 
 .panel{
