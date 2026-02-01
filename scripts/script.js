@@ -89,6 +89,7 @@ rollBtn.onclick = () => {
     setTimeout(() => {
         setState("Готов", false)
         eventInput.value = ""
+        modifierRange.value = 0
     }, 1200);
 };
 
