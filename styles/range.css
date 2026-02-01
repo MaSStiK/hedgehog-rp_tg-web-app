@@ -1,0 +1,74 @@
+/* ===== Modifier range with labels ===== */
+
+.range-block{
+  position: relative;
+  padding-top: 22px; /* место под цифры */
+}
+
+.range-labels{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none; /* чтобы не мешали ползунку */
+}
+
+.range-labels span{
+  opacity: .75;
+}
+
+/* colors */
+.range-labels .neg{
+  color: #ef4444;
+}
+
+.range-labels .zero{
+  color: #9ca3af;
+}
+
+.range-labels .pos{
+  color: #22c55e;
+}
+
+/* range itself */
+.modifier-range{
+  width: 100%;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #ef4444 0%,
+    #ef4444 45%,
+    #6b7280 50%,
+    #22c55e 55%,
+    #22c55e 100%
+  );
+  outline: none;
+}
+
+/* thumb */
+.modifier-range::-webkit-slider-thumb{
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(0,0,0,.3);
+  cursor: pointer;
+}
+
+.modifier-range::-moz-range-thumb{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(0,0,0,.3);
+  cursor: pointer;
+}

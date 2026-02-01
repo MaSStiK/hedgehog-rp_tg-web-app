@@ -7,8 +7,8 @@ const lastValue = document.getElementById("lastValue");
 const eventInput = document.getElementById("eventInput");
 const sendState = document.getElementById("sendState");
 const closeLink = document.getElementById("closeLink");
+const modifierRange = document.getElementById("modifierRange");
 
-// UX helpers
 function setState(text, isBusy=false){
     sendState.textContent = text;
     rollBtn.disabled = isBusy;
@@ -16,7 +16,6 @@ function setState(text, isBusy=false){
 
 let username
 
-// Telegram init
 if (tg) {
     tg.ready();
 
@@ -46,23 +45,46 @@ if (tg) {
     };
 }
 
-// “Бросок”
+// Бросок кубика
 rollBtn.onclick = () => {
     if (!tg) return alert("Открой в Telegram Mini App.");
 
     const sides = getSelectedDice();
-    const value = rollDice(sides);
+    const baseValue = rollDice(sides);
+    let finalValue = baseValue;
+    let modifier = 0;
+    let absModifier = 0;
+    let sign = "+"
+    
+    // применяем модификатор ТОЛЬКО для D20
+    if (sides === 20) {
+        modifier = Number(modifierRange.value) || 0;
+        finalValue = finalValue + modifier
+        finalValue = finalValue < 1 ? 1 : finalValue > 20 ? 20 : finalValue;
+    }
 
-    setState("Отправление", true);
-    lastValue.textContent = value;
+    if (modifier === 0) {
+        lastValue.textContent = baseValue;
+    } else {
+        sign = modifier > 0 ? "+" : "−"
+        absModifier = Math.abs(modifier);
+        lastValue.textContent = `${baseValue} ${sign} ${absModifier} = ${finalValue}`;
+    }
 
-    const textEvent = eventInput.value
-    let message = `${username}\n`
-    message += textEvent ? `Событие: ${textEvent}\n` : "" // Событие перед сообщением
-    message += `Кость D${sides} ➜ ${value}`
+    let textEvent = eventInput.value
+    let message;
+    if (sides === 20 && modifier !== 0) {
+        message = `${username}\n`
+        message += textEvent ? `Событие: ${textEvent}\n` : ""
+        message += `Кость D${sides} ➜ ${baseValue} ${sign} ${absModifier} ➜ ${finalValue}`
+    } else {
+        message = `${username}\n`
+        message += textEvent ? `Событие: ${textEvent}\n` : ""
+        message += `Кость D${sides} ➜ ${baseValue}`
+    }
 
     // console.log(message);
-
+    
     sendTextToTelegram(message)
     setTimeout(() => {
         setState("Готов", false)
@@ -97,6 +119,7 @@ function rollDice(sides){
 }
 
 async function sendTextToTelegram(text) {
+    setState("Отправление", true);
     try {
         await fetch("https://hedgehog-rp-api.appwrite.network/api/telegram", {
             method: "POST",

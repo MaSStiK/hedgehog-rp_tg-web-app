@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dice Mini App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./styles/style.css">
+  <link rel="stylesheet" href="./styles/range.css">
 </head>
 
 <body>
@@ -64,6 +65,36 @@
                     </div>
                 </div>
 
+                <div class="panel" id="modifierPanel">
+                    <div class="label" style="margin-bottom:10px;">Модификатор</div>
+
+                    <div class="range-block">
+                        <div class="range-labels">
+                            <span class="neg">-5</span>
+                            <span class="neg">-4</span>
+                            <span class="neg">-3</span>
+                            <span class="neg">-2</span>
+                            <span class="neg">-1</span>
+                            <span class="zero">0</span>
+                            <span class="pos">+1</span>
+                            <span class="pos">+2</span>
+                            <span class="pos">+3</span>
+                            <span class="pos">+4</span>
+                            <span class="pos">+5</span>
+                        </div>
+
+                        <input
+                            id="modifierRange"
+                            class="modifier-range"
+                            type="range"
+                            min="-5"
+                            max="5"
+                            step="1"
+                            value="0"
+                        />
+                    </div>
+                </div>
+
                 <button class="btn" id="rollBtn">
                     <span class="spark"></span>
                     Бросить кубик
@@ -77,6 +108,7 @@
         </div>
     </div>
 
-    <script src="./script.js"></script>
+    <script src="./scripts/script.js"></script>
+    <script src="./scripts/showModifier.js"></script>
 </body>
 </html>
